@@ -4,7 +4,8 @@ package edu.touro.mco152.bm;
 import java.text.DecimalFormat;
 
 /**
- *
+ * Gets and sets the variables for the grid
+ * @author Ezra Koppel
  */
 public class DiskMark {
     

@@ -641,6 +641,12 @@ public final class MainFrame extends javax.swing.JFrame {
         totalTxProgBar.setString(String.valueOf(App.targetTxSizeKb()));
     }//GEN-LAST:event_numFilesComboActionPerformed
 
+
+    /**
+     * resets both the gui and app test data
+     * @author Ezra Koppel
+     * @param evt
+     */
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         App.resetTestData();
         Gui.resetTestData();

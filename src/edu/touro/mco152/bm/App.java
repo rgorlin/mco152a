@@ -198,12 +198,7 @@ public class App {
             Logger.getLogger(SelectFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    /**
-     * Creates a string to be used as the configuration string
-     * @author Ezra Koppel
-     * @return the configuration string
-     */
+    
     public static String getConfigString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Config for Java Disk Mark ").append(getVersion()).append('\n');

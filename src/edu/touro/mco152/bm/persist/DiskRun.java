@@ -86,7 +86,7 @@ public class DiskRun implements Serializable {
     public String toString() {
         return "Run("+getIoMode()+","+getBlockOrder()+"): "+totalMarks+" run avg: "+getRunAvg();
     }
-    
+
     public DiskRun() {
         this.startTime = new Date();
     }
@@ -126,7 +126,13 @@ public class DiskRun implements Serializable {
     public void SetAvg(double avg) {
         setRunAvg(avg);
     }
-    
+
+    /**
+     * Returns how long the disk took to run, or tells you it does not know
+     * how long it took because it has no end time
+     * @author Ezra Koppel
+     * @return a string representing the time it takes to run the disk
+     */
     public String getDuration() {
         if (getEndTime() == null) {
             return "unknown";

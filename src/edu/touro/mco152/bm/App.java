@@ -201,6 +201,7 @@ public class App {
 
     /**
      * Creates a string to be used as the configuration string
+     * This comment was written by Ezra Koppel
      * @return the configuration string
      */
     public static String getConfigString() {

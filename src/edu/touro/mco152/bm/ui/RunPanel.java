@@ -12,8 +12,8 @@ import javax.swing.table.DefaultTableModel;
 import edu.touro.mco152.bm.persist.DiskRun;
 
 /**
- * This class creates a panel, runs it, and clears the table
- * @author Ezra Koppel
+ *
+ * @author James
  */
 public class RunPanel extends javax.swing.JPanel {
 

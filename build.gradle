@@ -1,0 +1,42 @@
+/*
+ * Build file for BadBM, with standard directories, builds thin Jar
+ *
+ */
+
+plugins {
+    // Apply the java-library plugin to add support for Java Library
+    id 'java-library'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+repositories {
+    // Use jcenter for resolving dependencies.
+    jcenter()
+}
+
+
+dependencies {	    
+
+    //Charting api/runtime
+    api  group: 'org.jfree', name: 'jfreechart', version: '1.0.17'
+    
+    // database/persistence
+    api group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
+	implementation group: 'org.eclipse.persistence', name: 'org.eclipse.persistence.jpa.modelgen', version: '2.4.2'
+	implementation group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.7.4'
+    
+	implementation group: 'org.apache.derby', name: 'derby', version: '10.13.1.1'
+}
+
+jar {
+  manifest {
+    attributes(
+      'Main-Class': 'edu.touro.mco152.bm.App'
+    )
+  }
+}
+
+

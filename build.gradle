@@ -4,6 +4,7 @@
  */
 
 plugins {
+
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
 }
@@ -29,6 +30,9 @@ dependencies {
 	implementation group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.7.4'
     
 	implementation group: 'org.apache.derby', name: 'derby', version: '10.13.1.1'
+
+    // Junit-5 testing
+    testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
 }
 
 jar {
@@ -42,4 +46,9 @@ jar {
 sourceSets  {
     // MJC this is need to make entity classes visible to the persistence scanner
     sourceSets.main.output.resourcesDir = sourceSets.main.java.outputDir
+}
+
+
+test {
+    useJUnitPlatform()
 }

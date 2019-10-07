@@ -59,7 +59,7 @@ public class App {
     public static int numOfBlocks = 32;     // desired number of blocks
     public static int blockSizeKb = 512;    // size of a block in KBs
     
-    public static DiskWorker worker = null;
+    public static DiskWorkerSwing worker = null;
     public static int nextMarkNumber = 1;   // number of the next mark
     public static double wMax = -1, wMin = -1, wAvg = -1;
     public static double rMax = -1, rMin = -1, rAvg = -1;
@@ -280,7 +280,7 @@ public class App {
         if (dataDir.exists() == false) { dataDir.mkdirs(); }
         
         //7. start disk worker thread
-        worker = new DiskWorker();
+        worker = new DiskWorkerSwing();
         worker.addPropertyChangeListener((final PropertyChangeEvent event) -> {
             switch (event.getPropertyName()) {
                 case "progress":

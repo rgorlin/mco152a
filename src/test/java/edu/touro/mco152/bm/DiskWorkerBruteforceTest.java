@@ -33,7 +33,7 @@ public class DiskWorkerBruteforceTest {
 
         // Arrange test based on settings of properties (indeterminate) from last run
         setupDefaultAsPerProperties();
-        DiskWorker worker = new DiskWorker();
+        DiskWorker<D> worker = new DiskWorker<D>();
 
         // Act by invoking the Swing execute which will call DiskWorker on separate thread
         worker.execute();

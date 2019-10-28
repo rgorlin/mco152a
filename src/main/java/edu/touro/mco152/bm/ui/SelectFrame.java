@@ -4,6 +4,7 @@ package edu.touro.mco152.bm.ui;
 import java.io.File;
 
 import edu.touro.mco152.bm.App;
+import edu.touro.mco152.bm.ConfigUtils;
 
 /**
  *
@@ -65,7 +66,7 @@ public class SelectFrame extends javax.swing.JFrame {
         switch (evt.getActionCommand()) {
             case "ApproveSelection":
                 App.locationDir = jFileChooser1.getSelectedFile();
-                App.saveConfig();
+                ConfigUtils.saveConfig();
                 Gui.mainFrame.setLocation(App.locationDir.getAbsolutePath());
                 break;
             case "CancelSelection":

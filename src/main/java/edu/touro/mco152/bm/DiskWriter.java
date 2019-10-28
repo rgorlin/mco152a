@@ -1,55 +1,62 @@
 package edu.touro.mco152.bm;
 
 import edu.touro.mco152.bm.persist.DiskRun;
-import edu.touro.mco152.bm.persist.EM;
 import edu.touro.mco152.bm.ui.Gui;
 
-import javax.persistence.EntityManager;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static edu.touro.mco152.bm.App.*;
-import static edu.touro.mco152.bm.App.msg;
-import static edu.touro.mco152.bm.DiskMark.MarkType.WRITE;
+import static edu.touro.mco152.bm.BenchMarker.MarkType.WRITE;
 
-public class DiskWriter extends DiskWorker {
+/**
+ * DiskWriter is a child of DiskWorker. It handles all the necessary writing of a disk and is completely flexible
+ * to be called from any platform. Works together with DiskReader to be able to write and read a disk using any platform.
+ * Extends DiskWorker to allow easy variable sharing with DiskReader.
+ */
+public class DiskWriter extends DiskWorker implements WriteableMemory {
 
     private DiskMark wMark;
     private long totalBytesWrittenInMark = 0;
     private String mode = "rw";
-    DiskHelper dhWriter = new DiskHelper();
+    DiskUtils dhWriter = new DiskUtils();
     DiskRun run = new DiskRun(DiskRun.IOMode.WRITE, App.blockSequence);
 
-    protected void onCreate() {
+    @Override
+    public void onCreate() {
         dhWriter.onCreate(run);
         if (App.multiFile == false) {
             testFile = new File(dataDir.getAbsolutePath() + File.separator + "testdata.jdm");
         }
     }
 
-    protected int getProgress() {
+    @Override
+    public int getProgress() {
         return (int) percentComplete;
     }
 
-    protected void setProgress(int progress) {
+    @Override
+    public void setProgress(int progress) {
         percentComplete = progress;
     }
+
 
     protected int getStartFileNum() {
         return startFileNum;
     }
 
-    protected void setUp(int m) {
+    @Override
+    public void setUp(int m) {
         if (App.multiFile == true) {
             testFile = new File(dataDir.getAbsolutePath()
                     + File.separator + "testdata" + m + ".jdm");
         }
-        wMark = new DiskMark(WRITE);
+        wMark = new DiskMark();
+        wMark.setMarkType(WRITE);
         wMark.setMarkNum(m);
         startTime = System.nanoTime();
         if (App.writeSyncEnable) {
@@ -57,7 +64,8 @@ public class DiskWriter extends DiskWorker {
         }
     }
 
-    protected void write() {
+    @Override
+    public void write() {
         try {
             try (RandomAccessFile rAccFile = new RandomAccessFile(testFile, mode)) {
                 for (int b = 0; b < numOfBlocks; b++) {
@@ -82,20 +90,22 @@ public class DiskWriter extends DiskWorker {
         }
     }
 
-    protected DiskMark getPublishInfo(int m) {
+    @Override
+    public BenchMarker getPublishInfo(int m) {
         endTime = System.nanoTime();
         elapsedTimeNs = endTime - startTime;
         double sec = (double) elapsedTimeNs / (double) 1000000000;
         double mbWritten = (double) totalBytesWrittenInMark / (double) MEGABYTE;
         wMark.setBwMbSec(mbWritten / sec);
-        msg("m:" + m + " write IO is " + wMark.getBwMbSecAsString() + " MB/s     "
+        AppUtils.msg("m:" + m + " write IO is " + wMark.getBwMbSecAsString() + " MB/s     "
                 + "(" + Util.displayString(mbWritten) + "MB written in "
                 + Util.displayString(sec) + " sec)");
-        App.updateMetrics(wMark);
+        AppUtils.updateMetrics(wMark);
         return wMark;
     }
 
-    protected void setRunVars() {
+    @Override
+    public void setRunVars() {
         dhWriter.setRunVars(run, wMark);
     }
 
@@ -106,4 +116,5 @@ public class DiskWriter extends DiskWorker {
     protected void updateGui() {
         Gui.runPanel.addRun(run);
     }
+
 }

@@ -9,6 +9,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.table.DefaultTableModel;
 
+import edu.touro.mco152.bm.persist.BenchRun;
 import edu.touro.mco152.bm.persist.DiskRun;
 
 /**
@@ -103,11 +104,11 @@ public class RunPanel extends javax.swing.JPanel {
     private javax.swing.JTable runTable;
     // End of variables declaration//GEN-END:variables
 
-    public void addRun(DiskRun run) {
+    public void addRun(BenchRun run) {
         DefaultTableModel model = (DefaultTableModel) this.runTable.getModel();
         model.addRow(
                 new Object[] {
-                    run.getDiskInfo(),
+                    run.getMemoryInfo(),
                     run.getIoMode(),
                     run.getBlockOrder(),
                     run.getNumMarks(),

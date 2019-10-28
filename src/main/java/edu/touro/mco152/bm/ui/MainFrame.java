@@ -13,10 +13,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.text.DefaultCaret;
 
-import edu.touro.mco152.bm.App;
-import edu.touro.mco152.bm.Util;
+import edu.touro.mco152.bm.*;
 import edu.touro.mco152.bm.persist.DiskRun;
-import edu.touro.mco152.bm.persist.DiskRun.BlockSequence;
+import edu.touro.mco152.bm.persist.BenchRun.BlockSequence;
 
 /**
  *
@@ -40,7 +39,7 @@ public final class MainFrame extends javax.swing.JFrame {
         totalTxProgBar.setStringPainted(true);
         totalTxProgBar.setValue(0);
         totalTxProgBar.setString("");
-        setTitle(getTitle()+" "+App.getVersion());
+        setTitle(getTitle()+" "+ AppUtils.getVersion());
         
         // auto scroll the text area.
         DefaultCaret caret = (DefaultCaret) msgTextArea.getCaret();
@@ -615,34 +614,34 @@ public final class MainFrame extends javax.swing.JFrame {
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
         if (App.state==App.State.DISK_TEST_STATE) {
-            App.cancelBenchmark();
+            DiskBenchMark.cancelBenchmark();
         } else if (App.state==App.State.IDLE_STATE) {
             applyTestParams();
-            App.startBenchmark();
+            DiskBenchMark.startBenchmark();
         }
         
     }//GEN-LAST:event_startButtonActionPerformed
 
     private void blockSizeComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blockSizeComboActionPerformed
         App.blockSizeKb = Integer.valueOf((String) blockSizeCombo.getSelectedItem());
-        fileSizeLabel.setText(String.valueOf(App.targetMarkSizeKb()));
-        totalTxProgBar.setString(String.valueOf(App.targetTxSizeKb()));
+        fileSizeLabel.setText(String.valueOf( AppUtils.targetMarkSizeKb()));
+        totalTxProgBar.setString(String.valueOf( AppUtils.targetTxSizeKb()));
     }//GEN-LAST:event_blockSizeComboActionPerformed
 
     private void numBlocksComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numBlocksComboActionPerformed
         App.numOfBlocks = Integer.valueOf((String) numBlocksCombo.getSelectedItem());
-        fileSizeLabel.setText(String.valueOf(App.targetMarkSizeKb()));
-        totalTxProgBar.setString(String.valueOf(App.targetTxSizeKb()));
+        fileSizeLabel.setText(String.valueOf( AppUtils.targetMarkSizeKb()));
+        totalTxProgBar.setString(String.valueOf( AppUtils.targetTxSizeKb()));
     }//GEN-LAST:event_numBlocksComboActionPerformed
 
     private void numFilesComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numFilesComboActionPerformed
         App.numOfMarks = Integer.valueOf((String) numFilesCombo.getSelectedItem());
-        fileSizeLabel.setText(String.valueOf(App.targetMarkSizeKb()));
-        totalTxProgBar.setString(String.valueOf(App.targetTxSizeKb()));
+        fileSizeLabel.setText(String.valueOf( AppUtils.targetMarkSizeKb()));
+        totalTxProgBar.setString(String.valueOf( AppUtils.targetTxSizeKb()));
     }//GEN-LAST:event_numFilesComboActionPerformed
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
-        App.resetTestData();
+        AppUtils.resetTestData();
         Gui.resetTestData();
     }//GEN-LAST:event_resetButtonActionPerformed
 
@@ -658,7 +657,7 @@ public final class MainFrame extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         JOptionPane.showMessageDialog(Gui.mainFrame, 
-                "jDiskMark "+App.getVersion(),"About...",JOptionPane.PLAIN_MESSAGE);
+                "jDiskMark "+ AppUtils.getVersion(),"About...",JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void openLocButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openLocButtonActionPerformed
@@ -675,12 +674,12 @@ public final class MainFrame extends javax.swing.JFrame {
 
     private void multiFileCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_multiFileCheckBoxMenuItemActionPerformed
         App.multiFile = multiFileCheckBoxMenuItem.getState();
-        App.saveConfig();
+        ConfigUtils.saveConfig();
     }//GEN-LAST:event_multiFileCheckBoxMenuItemActionPerformed
 
     private void autoRemoveCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoRemoveCheckBoxMenuItemActionPerformed
         App.autoRemoveData = autoRemoveCheckBoxMenuItem.getState();
-        App.saveConfig();
+        ConfigUtils.saveConfig();
     }//GEN-LAST:event_autoRemoveCheckBoxMenuItemActionPerformed
 
     private void deleteDataMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteDataMenuItemActionPerformed
@@ -689,11 +688,11 @@ public final class MainFrame extends javax.swing.JFrame {
 
     private void autoResetCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoResetCheckBoxMenuItemActionPerformed
         App.autoReset = autoResetCheckBoxMenuItem.getState();
-        App.saveConfig();
+        ConfigUtils.saveConfig();
     }//GEN-LAST:event_autoResetCheckBoxMenuItemActionPerformed
 
     private void resetSequenceMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetSequenceMenuItemActionPerformed
-        App.resetSequence();
+        AppUtils.resetSequence();
     }//GEN-LAST:event_resetSequenceMenuItemActionPerformed
 
     private void showMaxMinCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showMaxMinCheckBoxMenuItemActionPerformed
@@ -706,12 +705,12 @@ public final class MainFrame extends javax.swing.JFrame {
 
     private void writeSyncCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeSyncCheckBoxMenuItemActionPerformed
         App.writeSyncEnable = writeSyncCheckBoxMenuItem.getState();
-        App.saveConfig();
+        ConfigUtils.saveConfig();
     }//GEN-LAST:event_writeSyncCheckBoxMenuItemActionPerformed
 
     private void clearRunsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearRunsItemActionPerformed
-        App.msg("Clearing previous runs.");
-        App.clearSavedRuns();
+        AppUtils.msg("Clearing previous runs.");
+        AppUtils.clearSavedRuns();
     }//GEN-LAST:event_clearRunsItemActionPerformed
 
 
@@ -793,8 +792,8 @@ public final class MainFrame extends javax.swing.JFrame {
         App.numOfMarks = Integer.valueOf((String) numFilesCombo.getSelectedItem());
         App.numOfBlocks = Integer.valueOf((String) numBlocksCombo.getSelectedItem());
         App.blockSizeKb = Integer.valueOf((String) blockSizeCombo.getSelectedItem());
-        fileSizeLabel.setText(String.valueOf(App.targetMarkSizeKb()));
-        totalTxProgBar.setString(String.valueOf(App.targetTxSizeKb()));
+        fileSizeLabel.setText(String.valueOf(AppUtils.targetMarkSizeKb()));
+        totalTxProgBar.setString(String.valueOf(AppUtils.targetTxSizeKb()));
     }
     
     public void refreshWriteMetrics() {

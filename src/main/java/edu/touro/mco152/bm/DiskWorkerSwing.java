@@ -1,38 +1,34 @@
 package edu.touro.mco152.bm;
 
-import edu.touro.mco152.bm.*;
 import edu.touro.mco152.bm.ui.Gui;
 
 import javax.swing.*;
 import java.util.List;
 
 import static edu.touro.mco152.bm.App.dataDir;
-import static edu.touro.mco152.bm.App.msg;
+import static edu.touro.mco152.bm.AppUtils.msg;
 
-public class DiskWorkerSwing extends SwingWorker<Boolean, DiskMark> {
-
+public class DiskWorkerSwing extends SwingWorker<Boolean, BenchMarker> implements Worker {
+    /**
+     * This class brings together DiskWriter and DiskReader, and combines it with a SwingWorker class to allow for a GUI
+     * version of a Disk Tester.
+     * @return true, Ignore used for swing background purposes
+     * @throws Exception
+     */
     @Override
     protected Boolean doInBackground() throws Exception {
-        DiskWorker dWorker = new DiskWorker();
-        dWorker.onCreate();
+        onCreate();
         Gui.updateLegend();
 
         if (App.autoReset == true) {
-            App.resetTestData();
+            AppUtils.resetTestData();
             Gui.resetTestData();
         }
 
 
         if (App.writeTest) {
             DiskWriter dw = new DiskWriter();
-            for (int m = dw.getStartFileNum(); m < dw.getStartFileNum() + App.numOfMarks && !isCancelled(); m++) {
-                dw.onCreate();
-                dw.setUp(m);
-                dw.write();
-                setProgress(dw.getProgress());
-                publish(dw.getPublishInfo(m));
-                dw.setRunVars();
-            }
+            write(dw);
             dw.initializeEMManager();
             dw.updateGui();
         }
@@ -51,14 +47,7 @@ public class DiskWorkerSwing extends SwingWorker<Boolean, DiskMark> {
 
         if (App.readTest) {
             DiskReader dr = new DiskReader();
-            for (int m = dr.getStartFileNum(); m < dr.getStartFileNum() + App.numOfMarks && !isCancelled(); m++) {
-                dr.onCreate();
-                dr.setUp(m);
-                dr.read();
-                setProgress(dr.getProgress());
-                publish(dr.getPublishInfo(m));
-                dr.setRunVars();
-            }
+            read(dr);
             dr.initializeEMManger();
             dr.updateGui();
         }
@@ -66,10 +55,19 @@ public class DiskWorkerSwing extends SwingWorker<Boolean, DiskMark> {
         return true;
     }
 
+
+    protected void onCreate() {
+        System.out.println("*** starting new worker thread");
+
+        msg("Running readTest " + App.readTest + "   writeTest " + App.writeTest);
+        msg("num files: " + App.numOfMarks + ", num blks: " + App.numOfBlocks
+                + ", blk size (kb): " + App.blockSizeKb + ", blockSequence: " + App.blockSequence);
+    }
+
     @Override
-    protected void process(List<DiskMark> markList) {
+    protected void process(List<BenchMarker> markList) {
         markList.stream().forEach((m) -> {
-            if (m.type == DiskMark.MarkType.WRITE) {
+            if (m.getMarkType() == BenchMarker.MarkType.WRITE) {
                 Gui.addWriteMark(m);
             } else {
                 Gui.addReadMark(m);
@@ -84,5 +82,29 @@ public class DiskWorkerSwing extends SwingWorker<Boolean, DiskMark> {
         }
         App.state = App.State.IDLE_STATE;
         Gui.mainFrame.adjustSensitivity();
+    }
+
+    @Override
+    public void read(ReadableMemory dr) {
+        for (int m = App.nextMarkNumber; m < App.nextMarkNumber + App.numOfMarks && !isCancelled(); m++) {
+            dr.onCreate();
+            dr.setUp(m);
+            dr.read();
+            setProgress(dr.getProgress());
+            publish(dr.getPublishInfo(m));
+            dr.setRunVars();
+        }
+    }
+
+    @Override
+    public void write(WriteableMemory dw) {
+        for (int m = App.nextMarkNumber; m < App.nextMarkNumber + App.numOfMarks && !isCancelled(); m++) {
+            dw.onCreate();
+            dw.setUp(m);
+            dw.write();
+            setProgress(dw.getProgress());
+            publish(dw.getPublishInfo(m));
+            dw.setRunVars();
+        }
     }
 }

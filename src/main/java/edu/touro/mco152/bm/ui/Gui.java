@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.text.NumberFormat;
 import javax.swing.JProgressBar;
+
+import edu.touro.mco152.bm.BenchMarker;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -15,7 +17,6 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import edu.touro.mco152.bm.App;
-import edu.touro.mco152.bm.DiskMark;
 
 /**
  * Store gui references for easy access
@@ -92,7 +93,7 @@ public final class Gui {
         return chartPanel;
     }
     
-    public static void addWriteMark(DiskMark mark) {
+    public static void addWriteMark(BenchMarker mark) {
         wSeries.add(mark.getMarkNum(), mark.getBwMbSec());
         wAvgSeries.add(mark.getMarkNum(), mark.getCumAvg());
         if (App.showMaxMin) {
@@ -102,7 +103,7 @@ public final class Gui {
         Gui.mainFrame.refreshWriteMetrics();
         System.out.println(mark.toString());
     }
-    public static void addReadMark(DiskMark mark) {
+    public static void addReadMark(BenchMarker mark) {
         rSeries.add(mark.getMarkNum(), mark.getBwMbSec());
         rAvgSeries.add(mark.getMarkNum(), mark.getCumAvg());
         if (App.showMaxMin) {
